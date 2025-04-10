@@ -1,4 +1,4 @@
-import Skew2 from "./Skew2";
+import Skew2 from "./Skew2.jsx";
 
 function App() {
   return <Skew2 />;

@@ -2,6 +2,7 @@
 body {
   background: #000;
 }
+
 .skew2-container {
   background-image: url('./assets/goldbg.png');
   background-size: cover;
@@ -11,7 +12,7 @@ body {
   margin: 50px auto 0;
   font-family: 'Orbitron', sans-serif;
   text-align: center;
-  box-shadow: 0 0 12px rgba(255, 215, 0, .2), 0 0 30px rgba(255, 215, 0, .2);
+  box-shadow: 0 0 12px rgba(255,215,0,0.2), 0 0 30px rgba(255,215,0,0.2);
 }
 
 .skew2-title {
@@ -41,16 +42,19 @@ body {
   font-family: 'Orbitron', sans-serif;
   padding: 2px 3px;
   border: none;
+  -webkit-appearance: none;
+  appearance: none;
+  color: #000;
 }
 
 .skew2-mute-default {
   background-color: #fff;
-  color: inherit;
+  color: #000;
   cursor: pointer;
 }
 .skew2-mute-active {
   background-color: #f33;
-  color: inherit;
+  color: #000;
   cursor: pointer;
 }
 .skew2-mute-disabled {
@@ -68,11 +72,15 @@ body {
   padding: 2px 3px;
   background-color: #fff;
   border: none;
+  -webkit-appearance: none;
+  appearance: none;
   cursor: pointer;
+  color: #000;
 }
 
 .skw2-solo-active {
   background: #adff2f;
+  color: #000;
 }
 
 /* ステップ */
@@ -165,6 +173,8 @@ body {
   font-weight: bold;
   cursor: pointer;
   font-family: 'Orbitron', sans-serif;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .skew2-bpm-slider {
@@ -180,11 +190,11 @@ body {
   border: none;
 }
 
-/* Chrome */
 .skew2-bpm-slider::-webkit-slider-runnable-track {
   height: 10px;
   background: #000;
 }
+
 .skew2-bpm-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 10px;
@@ -195,11 +205,11 @@ body {
   cursor: pointer;
 }
 
-/* Firefox */
 .skew2-bpm-slider::-moz-range-track {
   height: 10px;
   background: #000;
 }
+
 .skew2-bpm-slider::-moz-range-thumb {
   width: 10px;
   height: 10px;
@@ -208,6 +218,7 @@ body {
   border-radius: 0;
   cursor: pointer;
 }
+
 .skew2-bpm-slider::-moz-focus-outer {
   border: 0;
 }
@@ -221,7 +232,7 @@ body {
   font-weight: bold;
 }
 
-/* DialKnob 用スタイル（すべて CSS 管理） */
+/* DialKnob 用スタイル */
 .dial-knob {
   width: 30px;
   height: 30px;
@@ -254,6 +265,9 @@ body {
   margin-bottom: 4vw;
   font-size: 6vw;
   font-weight: 800;
+  -webkit-appearance: none;
+  appearance: none;
+  color: #000;
 }
 
 .skew2-track-tab {
@@ -263,13 +277,16 @@ body {
   align-items: center;
   width: 12vw;
   height: 12vw;
-  margin: 0 0 0 1vw;
+  margin-left: 1vw;
   font-size: 7vw;
   font-weight: 600;
   font-family: 'Orbitron', sans-serif;
   background-color: #fff;
   border: none;
+  -webkit-appearance: none;
+  appearance: none;
   cursor: pointer;
+  color: #000;
 }
 
 .skew2-track-tab.active {
@@ -281,10 +298,9 @@ body {
 /* レスポンシブ対応：600px 以下の場合 */
 @media (max-width: 600px) {
   body {
-  background-image: url('./assets/goldbg.png');
-  background-size: auto;
+    background-image: url('./assets/goldbg.png');
+    background-size: auto;
   }
-
   .skew2-container {
     width: 100%;
     margin: 0 auto;
@@ -345,7 +361,7 @@ body {
     width: 100%;
     font-size: 3.9vw;
   }
-  /* OSC ノブ部分：2段表示にする */
+  /* OSC ノブ部分：2段表示（各グループは50%幅） */
   .skew2-osc-row {
     flex-wrap: wrap;
     justify-content: flex-start;

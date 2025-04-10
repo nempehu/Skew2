@@ -1,4 +1,4 @@
-import DialKnob from "./components/DialKnob";
+import DialKnob from "./components/DialKnob.jsx";
 import "./App.css";
 import { useState, useRef, useEffect, useCallback } from "react";
 
@@ -33,14 +33,14 @@ const labelMap = {
 };
 
 export default function Skew2() {
+  // 各トラックのステップ状態
   const [steps, setSteps] = useState(
     Array(NUM_TRACKS).fill(null).map(() => Array(NUM_STEPS).fill(false))
   );
   const stepsRef = useRef(steps);
-  useEffect(() => {
-    stepsRef.current = steps;
-  }, [steps]);
+  useEffect(() => { stepsRef.current = steps; }, [steps]);
 
+  // 各トラックのOSCパラメータ
   const [params, setParams] = useState(
     Array(NUM_TRACKS).fill(null).map(() => ({ ...DEFAULT_PARAMS }))
   );
@@ -56,6 +56,7 @@ export default function Skew2() {
   const soloStatesRef = useRef(soloStates);
   useEffect(() => { soloStatesRef.current = soloStates; }, [soloStates]);
 
+  // AudioContext 関連
   const audioCtxRef = useRef(null);
   const schedulerIntervalRef = useRef(null);
   const playNoteRef = useRef(null);
@@ -63,7 +64,7 @@ export default function Skew2() {
   const bpmRef = useRef(bpm);
   useEffect(() => { bpmRef.current = bpm; }, [bpm]);
 
-  // グローバル出力ノード（リミッター付き）
+  // グローバル出力（リミッター付き）
   const globalOutputRef = useRef(null);
   const initAudioContext = () => {
     if (!audioCtxRef.current) {
@@ -74,23 +75,23 @@ export default function Skew2() {
       limiter.ratio.setValueAtTime(20, audioCtxRef.current.currentTime);
       limiter.attack.setValueAtTime(0.003, audioCtxRef.current.currentTime);
       limiter.release.setValueAtTime(0.20, audioCtxRef.current.currentTime);
-      
+
       const globalOutput = audioCtxRef.current.createGain();
       globalOutput.gain.setValueAtTime(1, audioCtxRef.current.currentTime);
       globalOutput.connect(limiter);
       limiter.connect(audioCtxRef.current.destination);
-      
       globalOutputRef.current = globalOutput;
     }
   };
 
-  // モバイル判定と、モバイル用表示トラックの状態
+  // モバイル判定
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 600);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  // モバイル用に表示するトラック番号
   const [selectedTrack, setSelectedTrack] = useState(0);
 
   const toggleStep = (track, step) => {
@@ -143,6 +144,7 @@ export default function Skew2() {
     });
   };
 
+  // スケジューラ側は常に全トラックの音をスケジュール（UI表示はモバイルなら selectedTrack のみ表示）
   const getShouldPlay = (tIndex) => {
     const soloActive = soloStatesRef.current.some((x) => x);
     return soloActive ? soloStatesRef.current[tIndex] : !muteStatesRef.current[tIndex];
@@ -227,10 +229,10 @@ export default function Skew2() {
         const period = (60 / bpmRef.current) / 4;
         const step = stepRef.current;
         setCurrentStep(step);
-        // nextNoteTime をローカル変数にキャプチャ
         const noteTime = nextNoteTime;
+        // スケジュールは全トラックで行う
         stepsRef.current.forEach((track, tIndex) => {
-          if ((!isMobile || tIndex === selectedTrack) && track[step] && getShouldPlay(tIndex)) {
+          if (track[step] && getShouldPlay(tIndex)) {
             playNoteRef.current(tIndex, noteTime);
           }
         });
@@ -240,7 +242,7 @@ export default function Skew2() {
     }, 25);
     schedulerIntervalRef.current = scheduler;
     return () => clearInterval(scheduler);
-  }, [isPlaying, isMobile, selectedTrack]);
+  }, [isPlaying]);
 
   const startSequencer = () => {
     initAudioContext();
@@ -248,9 +250,7 @@ export default function Skew2() {
   };
 
   const stopSequencer = () => {
-    if (schedulerIntervalRef.current) {
-      clearInterval(schedulerIntervalRef.current);
-    }
+    if (schedulerIntervalRef.current) clearInterval(schedulerIntervalRef.current);
     setIsPlaying(false);
     setCurrentStep(0);
     stepRef.current = 0;
@@ -279,7 +279,11 @@ export default function Skew2() {
         <div key={tIndex} className="skew2-track">
           <div className="skew2-track-controls">
             <button
-              onClick={!soloStates[isMobile ? selectedTrack : tIndex] ? () => toggleMute(isMobile ? selectedTrack : tIndex) : undefined}
+              onClick={
+                !soloStates[isMobile ? selectedTrack : tIndex]
+                  ? () => toggleMute(isMobile ? selectedTrack : tIndex)
+                  : undefined
+              }
               className={`skew2-mute-btn ${
                 (isMobile ? soloStates[selectedTrack] : soloStates[tIndex])
                   ? "skew2-mute-disabled"
@@ -292,14 +296,18 @@ export default function Skew2() {
             </button>
             <button
               onClick={() => toggleSolo(isMobile ? selectedTrack : tIndex)}
-              className={`skew2-solo-btn ${ (isMobile ? soloStates[selectedTrack] : soloStates[tIndex]) ? "skw2-solo-active" : "" }`}
+              className={`skew2-solo-btn ${
+                (isMobile ? soloStates[selectedTrack] : soloStates[tIndex]) ? "skw2-solo-active" : ""
+              }`}
             >
               SOLO
             </button>
           </div>
           <div className="skew2-steps">
             {track.map((on, sIndex) => {
-              const stepClass = `skew2-step ${sIndex === currentStep ? "skew2-step-current" : ""} ${on ? "skew2-step-on" : "skew2-step-off"}`;
+              const stepClass = `skew2-step ${sIndex === currentStep ? "skew2-step-current" : ""} ${
+                on ? "skew2-step-on" : "skew2-step-off"
+              }`;
               return (
                 <div
                   key={sIndex}
@@ -317,13 +325,19 @@ export default function Skew2() {
           {Object.entries(trackParams).map(([param, value]) => (
             param !== "fm" && (
               <div key={param} className="skew2-knob-group">
-                <DialKnob value={value} onChange={(v) => updateParam(isMobile ? selectedTrack : tIndex, param, v)} />
+                <DialKnob
+                  value={value}
+                  onChange={(v) => updateParam(isMobile ? selectedTrack : tIndex, param, v)}
+                />
                 <span className="skew2-knob-label">{labelMap[param]}</span>
               </div>
             )
           ))}
           <div className="skew2-knob-group">
-            <div onClick={() => toggleFM(isMobile ? selectedTrack : tIndex)} className="skew2-fm-btn">
+            <div
+              onClick={() => toggleFM(isMobile ? selectedTrack : tIndex)}
+              className="skew2-fm-btn"
+            >
               {params[isMobile ? selectedTrack : tIndex].fm && (
                 <div className="skew2-fm-indicator" />
               )}
