@@ -276,8 +276,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 12vw;
-  height: 12vw;
+  width: 10vw;
+  height: 10vw;
   margin-left: 1vw;
   font-size: 7vw;
   font-weight: 600;
@@ -310,42 +310,40 @@ body {
     background: none;
   }
   .skew2-title {
-    font-size: 16vw;
+    font-size: 10vw;
     margin: 0 auto;
-    padding: 30px 0;
+    padding: 3vw 0 6vw;
+  }
+  .skew2-track-tabs {
+    margin-bottom: 0;
+  }
+  .skew2-track {
+    margin-top: 4vw;
+    margin-bottom: 0;
+  }
+  .skew2-track-controls {
+    gap: 2.25vw;
+    margin-bottom: 0;
   }
   .skew2-steps {
     justify-content: flex-start;
     flex-flow: wrap;
     gap: 2.25vw;
+    margin-top: 4vw;
   }
   .skew2-step {
     width: 10vw;
     height: 10vw;
   }
-  .skew2-play-btn {
-    padding: 1vw 2vw;
-    font-size: 5vw;
-  }
-  .skew2-bpm-slider {
-    height: 20px;
-  }
-  .skew2-bpm-display {
-    width: 26vw;
-    font-size: 5vw;
-  }
-  .skew2-track-controls {
-    gap: 2.25vw;
-    margin-bottom: 15px;
-  }
   .skew2-mute-btn,
   .skew2-solo-btn {
     width: 14vw;
-    padding: 2vw 0;
+    padding: 1.5vw 0;
     font-size: 3.6vw;
     font-weight: 500;
   }
   .skew2-osc-title {
+    margin: 4vw auto 0;
     font-size: 6vw;
   }
   .skew2-fm-btn {
@@ -362,10 +360,24 @@ body {
     width: 100%;
     font-size: 3.9vw;
   }
-  /* OSC ノブ部分：2段表示（各グループは50%幅） */
   .skew2-osc-row {
     flex-wrap: wrap;
     justify-content: flex-start;
     gap: 2.4vw;
+    margin-bottom: 0;
+  }
+  .skew2-controls {
+    margin-top: 2vw; /* + 2vw */
+  }
+  .skew2-play-btn {
+    padding: 1vw 2vw;
+    font-size: 5vw;
+  }
+  .skew2-bpm-slider {
+    height: 20px;
+  }
+  .skew2-bpm-display {
+    width: 26vw;
+    font-size: 5vw;
   }
 }
