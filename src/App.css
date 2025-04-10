@@ -243,6 +243,7 @@ body {
   cursor: pointer;
   overflow: hidden;
   user-select: none;
+  touch-action: none;
 }
 
 .dial-knob-indicator {

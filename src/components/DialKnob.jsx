@@ -19,12 +19,14 @@ export default function DialKnob({ value, onChange }) {
   const handleDragMove = useCallback((clientY) => {
     if (!isDragging) return;
     const deltaY = startYRef.current - clientY; // 上にドラッグすると正の値
-    const sensitivity = 0.005; 
+    const sensitivity = 0.005;
     const newValue = clamp(startValueRef.current + deltaY * sensitivity, 0, 1);
     onChange(newValue);
   }, [isDragging, onChange]);
 
-  const handleDragEnd = () => setIsDragging(false);
+  const handleDragEnd = useCallback(() => {
+    setIsDragging(false);
+  }, []);
 
   const handleMouseDown = (e) => {
     e.preventDefault();
@@ -39,29 +41,36 @@ export default function DialKnob({ value, onChange }) {
   };
 
   useEffect(() => {
-    const handleMouseMove = (e) => handleDragMove(e.clientY);
-    const handleMouseUp = () => handleDragEnd();
+    const handleMouseMove = (e) => {
+      handleDragMove(e.clientY);
+    };
+    const handleMouseUp = () => {
+      handleDragEnd();
+    };
     const handleTouchMove = (e) => {
       if (e.touches.length > 0) {
+        e.preventDefault(); // スクロール防止
         handleDragMove(e.touches[0].clientY);
       }
     };
-    const handleTouchEnd = () => handleDragEnd();
+    const handleTouchEnd = (e) => {
+      e.preventDefault();
+      handleDragEnd();
+    };
 
     if (isDragging) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
-      document.addEventListener("touchmove", handleTouchMove);
-      document.addEventListener("touchend", handleTouchEnd);
+      document.addEventListener("touchmove", handleTouchMove, { passive: false });
+      document.addEventListener("touchend", handleTouchEnd, { passive: false });
     }
-
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("touchmove", handleTouchMove);
       document.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [isDragging, handleDragMove]);
+  }, [isDragging, handleDragMove, handleDragEnd]);
 
   const rotation = -135 + value * 270;
 
