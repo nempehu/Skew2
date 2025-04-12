@@ -72,7 +72,7 @@ export default function Skew2() {
       const limiter = audioCtxRef.current.createDynamicsCompressor();
       limiter.threshold.setValueAtTime(-1, audioCtxRef.current.currentTime);
       limiter.knee.setValueAtTime(0, audioCtxRef.current.currentTime);
-      limiter.ratio.setValueAtTime(20, audioCtxRef.current.currentTime);
+      limiter.ratio.setValueAtTime(15, audioCtxRef.current.currentTime);
       limiter.attack.setValueAtTime(0.003, audioCtxRef.current.currentTime);
       limiter.release.setValueAtTime(0.20, audioCtxRef.current.currentTime);
 
@@ -156,11 +156,11 @@ export default function Skew2() {
       params[trackIndex];
     const decayTime = 0.2 + decay * 0.5;
     const stopTime = scheduledTime + decayTime;
-    const pitchEndTime = scheduledTime + 0.1 + pitchDecay * 0.5;
+    const pitchEndTime = scheduledTime + 0.05 + pitchDecay * 0.5;
 
     const osc = audioCtx.createOscillator();
     osc.type = "sine";
-    const startFreq = 200 + pitch * 1600;
+    const startFreq = 100 + pitch * 1600;
     osc.frequency.setValueAtTime(startFreq, scheduledTime);
     osc.frequency.exponentialRampToValueAtTime(100, pitchEndTime);
 
